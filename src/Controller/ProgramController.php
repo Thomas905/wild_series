@@ -71,24 +71,16 @@ class ProgramController extends AbstractController
         ->getRepository(Program::class)
         ->findOneBy(['id' => $programId],
         );
+
         $season = $this->getDoctrine()
             ->getRepository(Season::class)
-            ->findOneBy(
-            ['id' => $seasonId],
-        );
-
-        $episode = $this->getDoctrine()
-            ->getRepository(Episode::class)
             ->findBy(
-            ['season' => $seasonId],
+            ['program' => $program->getId()],
         );
-
-
 
         return $this->render('Program/season_show.html.twig', [
             'program' => $program,
-            'season' => $season,
-            'episode' => $episode,
+            'season' => $season[$seasonId -1],
         ]);
     }
 }
