@@ -7,8 +7,11 @@
         <img class="align-self-start mr-3" src="{{program.poster}}" alt="{{ program.title }} poster">
         <div class="media-body">
             <h1 class="mt-0">{{ program.title }}</h1>
-            <p>{{ program.summary }}</p>
+            <p>{{ program.synopsis }}</p>
             <p>Catégorie : {{ program.category.name }}</p>
+            {% for seasons in season %}
+                <a href="/program/{{program.id}}/season/{{seasons.id}}">{{seasons.description}}</a>
+            {% endfor %}
         </div>
     </div>
 
