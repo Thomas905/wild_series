@@ -9,8 +9,8 @@
             <h1 class="mt-0">{{ program.title }}</h1>
             <p>{{ program.synopsis }}</p>
             <p>Catégorie : {{ program.category.name }}</p>
-            {% for seasons in season %}
-                <a href="/program/{{program.id}}/season/{{seasons.number}}">{{seasons.description}}</a>
+            {% for seasons in program.seasons %}
+                <a href="{{ path('program_season_show', { 'program_id': program.id, 'season_id': seasons.id }) }}">{{seasons.description}}</a>
             {% endfor %}
         </div>
     </div>
