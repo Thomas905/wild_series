@@ -6,6 +6,7 @@ use App\Repository\ProgramRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=ProgramRepository::class)
@@ -21,38 +22,50 @@ class Program
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="ne me laisse pas tout vide")
      */
     private $title;
 
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\NotBlank(message="ne me laisse pas tout vide")
      */
     private $poster;
 
     /**
      * @ORM\ManyToOne(targetEntity=Category::class)
      * @ORM\JoinColumn(nullable=false)
+     * @Assert\NotBlank(message="ne me laisse pas tout vide")
      */
     private $category;
 
     /**
      * @ORM\Column(type="text")
+     * @Assert\NotBlank(message="ne me laisse pas tout vide")
+     * @Assert\Regex(
+     *      pattern="/(?i)(\W|^)plus\s{0,3}belle\s{0,3}la\s{0,3}vie(\W|$)/",
+     *      match=false,
+     *      message="On parle de vraies séries ici."
+     * )
      */
     private $synopsis;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="ne me laisse pas tout vide")
      */
     private $country;
 
     /**
      * @ORM\Column(type="integer")
+     * @Assert\NotBlank(message="ne me laisse pas tout vide")
      */
     private $year;
 
     /**
      * @ORM\OneToMany(targetEntity=Season::class, mappedBy="program")
+     * @Assert\NotBlank(message="ne me laisse pas tout vide")
      */
     private $seasons;
 

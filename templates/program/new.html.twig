@@ -1,8 +1,17 @@
 {% extends "base.html.twig" %}
 
 {% block body %}
-    {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button type="submit">Add category</button> 
-    {{ form_end(form) }}
+    <h1 class="text-center">Création d'un nouveau programme</h1>
+    <form >
+        {{ form_errors(form) }}
+        {{ form_start(form) }}
+        {{form_row(form.title, {'label': 'Titre du programme','attr':{'placeholder': 'Titre du film'}})}}
+        {{form_row(form.poster, {'label': 'Lien de l\'image','attr':{'placeholder': 'Lien de l\image'}})}}
+        {{form_row(form.synopsis, {'label': 'Description','attr':{'placeholder': 'Description'}})}}
+        {{form_row(form.country, {'label': 'Pays','attr':{'placeholder': 'Renseignez un pays'}})}}
+        {{form_row(form.year, {'label': 'Année','attr':{'placeholder': 'Année du programme'}})}}
+        {{form_row(form.category)}}
+        <button type="submit" class="btn btn-secondary">Ajouter une série</button>
+        {{ form_end(form) }}
+    </form>
 {% endblock %}
