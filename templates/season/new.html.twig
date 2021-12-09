@@ -4,8 +4,8 @@
 
 {% block body %}
     <h1 class="text-center">Création d'une nouvelle saison</h1>
-
+    <main>
     {{ include('season/_form.html.twig') }}
-
+    </main>
     <a class="btn btn-warning" href="{{ path('season_index') }}">Revenir a la liste</a>
 {% endblock %}

@@ -4,8 +4,8 @@
 
 {% block body %}
     <h1 class="text-center">Création d'un nouvelle épisode</h1>
-
+    <main>
     {{ include('episode/_form.html.twig') }}
-
+    </main>
     <a class="btn btn-warning" href="{{ path('episode_index') }}">Revenir à la liste</a>
 {% endblock %}

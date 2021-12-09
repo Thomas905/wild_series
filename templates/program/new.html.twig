@@ -1,8 +1,8 @@
 {% extends "base.html.twig" %}
 
 {% block body %}
-    <h1 class="text-center">Création d'un nouveau programme</h1>
-    <form >
+    <main>
+        <h1 class="text-center">Création d'un nouveau programme</h1>
         {{ form_errors(form) }}
         {{ form_start(form) }}
         {{form_row(form.title, {'label': 'Titre du programme','attr':{'placeholder': 'Titre du film'}})}}
@@ -11,7 +11,8 @@
         {{form_row(form.country, {'label': 'Pays','attr':{'placeholder': 'Renseignez un pays'}})}}
         {{form_row(form.year, {'label': 'Année','attr':{'placeholder': 'Année du programme'}})}}
         {{form_row(form.category)}}
+        {{form_row(form.actors)}}
         <button type="submit" class="btn btn-secondary">Ajouter une série</button>
         {{ form_end(form) }}
-    </form>
+    </main>    
 {% endblock %}

@@ -15,32 +15,32 @@ $secondary: #2800CA;
     font-family: 'Montserrat', sans-serif;
 }
 
-form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-around;
-}
-input, textarea, select {
-    color: black;
-    border: none;
-    border-radius: 5px;
-    border: 1px black solid;
-}
-
-.card {
-    margin: 0 auto;
-    float: none;
-    margin-bottom: 10px;
-}
-
 .card-flex{
     display: flex;
     flex-direction: column;
+    align-items: center;
+    margin-top: 2rem;
+}
+
+.card-corp{
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+    border-radius: 1rem;
+    margin-bottom: 3rem;
+}
+
+main{
+    margin: 1rem;
 }
 
 @media screen and (min-width: 768px){
     .card-flex{
         flex-direction: row;
+    }
+    .card-corp{
+        margin: 1rem;
+    }
+
+    main{
+        margin: 1rem 10rem;
     }
 }

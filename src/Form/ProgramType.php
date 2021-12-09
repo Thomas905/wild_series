@@ -3,7 +3,9 @@
 namespace App\Form;
 
 use App\Entity\Program;
+use App\Entity\Actor;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -18,8 +20,15 @@ class ProgramType extends AbstractType
             ->add('poster', TextType::class)
             ->add('synopsis', TextareaType::class, ['attr' => array('cols' => '20', 'rows' => '5')])
             ->add('country', TextType::class)
-            ->add('year', TextType::class)
+            ->add('year')
             ->add('category', null, ['choice_label' => 'name'])
+            ->add('actors', EntityType::class, [
+                'class' => Actor::class,
+                'choice_label' => 'name',
+                'multiple' => true,
+                'expanded' => true,
+                'by_reference' => false,
+            ])
         ;
     }
 
