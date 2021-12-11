@@ -3,14 +3,15 @@
 namespace App\Controller;
 
 use App\Entity\Episode;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Program;
 use App\Entity\Season;
 use App\Form\ProgramType;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use App\Service\Slugify;
 use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Route("/program", name="program_")
@@ -19,33 +20,35 @@ class ProgramController extends AbstractController
 {
 
 
-/**
-     * The controller for the category add form
-     *
+    /**
      * @Route("/new", name="new")
      */
-    public function new(Request $request) : Response
+    public function new(Request $request, Slugify $slugify): Response
     {
+        // Create a new program Object
         $program = new Program();
         // Create the associated Form
         $form = $this->createForm(ProgramType::class, $program);
         // Get data from HTTP request
-        $form->handleRequest($request);
+        $form->handlerequest($request);
         // Was the form submitted ?
         if ($form->isSubmitted() && $form->isValid()) {
             // Deal with the submitted data
             // Get the Entity Manager
             $entityManager = $this->getDoctrine()->getManager();
-            // Persist Category Object
+            $slug = $slugify->generate($program->getTitle());
+            $program->setSlug($slug);
+            // Persist Product Object
             $entityManager->persist($program);
             // Flush the persisted object
             $entityManager->flush();
             // Finally redirect to categories list
             return $this->redirectToRoute('program_index');
-        } 
-        // Render the form
+        }
+        // Render the form 
         return $this->render('program/new.html.twig', [
-            "form" => $form->createView()]);
+            "form" => $form->createView(),
+        ]);
     }
 
 
@@ -70,7 +73,7 @@ class ProgramController extends AbstractController
     /**
      * Getting a program by id
      *
-     * @Route("/{id<^[0-9]+$>}", name="show")
+     * @Route("/{slug}", methods={"GET"}, name="show")
      * @return Response
      */
     public function show(Program $program): Response

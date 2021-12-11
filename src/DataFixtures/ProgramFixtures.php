@@ -30,6 +30,7 @@ class ProgramFixtures extends Fixture implements DependentFixtureInterface
             for ($i=0; $i < count(ActorFixtures::ACTORS); $i++) {
                 $program->addActor($this->getReference('actor_' . $i));
             }
+            $program->setSlug($this->slugify->generate($programName));
             $this->addReference('program_' . $key, $program);
             $manager->persist($program);
         }
