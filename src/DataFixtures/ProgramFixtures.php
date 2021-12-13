@@ -3,34 +3,44 @@
 namespace App\DataFixtures;
 
 use App\Entity\Program;
+use App\Entity\User;
+use App\Service\Slugify;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
 class ProgramFixtures extends Fixture implements DependentFixtureInterface
 {
-    public const PROGRAM = [
-        'La belle au bois dormant',
-        'Jaquie et michel',
-        'Le film de noel',
-        'Incrotable talent de développeur',
-        'Ylaris mange du chocolat au pomme',
+    const PROGRAMS = [
+        'Walking Dead',
+        'Atypical',
+        'Fleabag',
+        'Six feet under',
+        'Sweet Home',
     ];
+
+    private Slugify $slugify;
+
+    public function __construct(Slugify $slugify)
+    {
+        $this->slugify = $slugify;
+    }
 
     public function load(ObjectManager $manager)
     {
-        foreach (self::PROGRAM as $key => $programName) {
+        foreach (self::PROGRAMS as $key => $programName) {
             $program = new Program();
             $program->setTitle($programName);
+            $program->setSlug($this->slugify->generate($programName));
             $program->setSynopsis('Une super série');
             $program->setYear('2010');
             $program->setPoster('https://fr.web.img6.acsta.net/c_210_280/pictures/210/454/21045474_20130930201634487.jpg');
             $program->setCountry('USA');
+            $program->setOwner($this->getReference('contributor_0'));
             $program->setCategory($this->getReference('category_0'));
             for ($i=0; $i < count(ActorFixtures::ACTORS); $i++) {
                 $program->addActor($this->getReference('actor_' . $i));
             }
-            $program->setSlug($this->slugify->generate($programName));
             $this->addReference('program_' . $key, $program);
             $manager->persist($program);
         }
@@ -40,11 +50,11 @@ class ProgramFixtures extends Fixture implements DependentFixtureInterface
 
     public function getDependencies()
     {
+        // Tu retournes ici toutes les classes de fixtures dont ProgramFixtures dépend
         return [
           ActorFixtures::class,
           CategoryFixtures::class,
+          UserFixtures::class,
         ];
     }
-
-
 }

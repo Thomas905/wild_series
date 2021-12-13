@@ -13,6 +13,34 @@
         </div>
     </div>
 
+    <div class="container justify-content-center mt-5 border-left border-right">
+        {% for comment in episode.comments %}
+        <div class="d-flex py-2 ">
+            <div class="second py-2 px-2 bg-primary rounded" > <span class="text1">{{comment.comment}}</span>
+                <div class="d-flex justify-content-between py-1 pt-2">
+                    <div><img src="https://i.imgur.com/AgAC1Is.jpg" width="18">{{comment.author.email}}<span class="text2"></span></div>
+                    {% if is_granted("ROLE_ADMIN") or app.user == comment.author %}
+                    <a style="color: white;" href="{{ path("program_comment_delete", {'program_id':program.id, 'season_id':season.id, 'episode_id': episode.id, 'comment_id': comment.id})}}">Supprimer le commentaire</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% else %}
+            <p>Aucun commentaire</p>
+    {% endfor %}
+    
+    </div>
+
+
+        <p></p>
+    
+    {% if app.user %}
+        {{ form_start(form) }}
+            {{ form_widget(form) }}
+            <button class="btn btn-secondary">{{ button_label|default('Save') }}</button>
+        {{ form_end(form) }}
+    {% endif %}
+
     <a href="{{ path('program_index') }}">
         Retour à la liste des programmes
     </a>
