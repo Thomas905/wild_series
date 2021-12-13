@@ -45,6 +45,7 @@ security:
     access_control:
         - { path: ^/program/new, roles: ROLE_CONTRIBUTOR }
         - { path: ^/program/[a-z-]+/edit, roles: ROLE_CONTRIBUTOR }
+        - { path: ^/my-profil, roles: ROLE_USER }
 
 
     
