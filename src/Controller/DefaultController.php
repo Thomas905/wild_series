@@ -19,7 +19,7 @@ class DefaultController extends AbstractController
             ->findAll();
 
         return $this->render(
-            'program/index.html.twig',
+            'index.html.twig',
             ['programs' => $programs]
         );
     }

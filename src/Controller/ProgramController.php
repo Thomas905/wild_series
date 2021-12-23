@@ -9,6 +9,8 @@ use App\Entity\Season;
 use App\Form\ProgramType;
 use App\Service\Slugify;
 use App\Form\CommentType;
+use App\Form\SearchProgramType;
+use App\Repository\ProgramRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -72,19 +74,24 @@ class ProgramController extends AbstractController
      * Show all rows from Program’s entity
      *
      * @Route("/", name="index")
-     * @return Response A response instance
      */
-    public function index(): Response
-    {
-        $programs = $this->getDoctrine()
-            ->getRepository(Program::class)
-            ->findAll();
+    public function index(Request $request, ProgramRepository $programRepository): Response
+{
+    $form = $this->createForm(SearchProgramType::class);
+    $form->handleRequest($request);
 
-        return $this->render(
-            'program/index.html.twig',
-            ['programs' => $programs]
-        );
+    if ($form->isSubmitted() && $form->isValid()) {
+        $search = $form->getData()['search'];
+        $programs = $programRepository->findLikeName($search);
+    } else {
+        $programs = $programRepository->findAll();
     }
+
+    return $this->render('program/index.html.twig', [
+        'programs' => $programs,
+        'form' => $form->createView(),
+    ]);
+}
 
     /**
      * Getting a program by id
