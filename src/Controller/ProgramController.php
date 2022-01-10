@@ -16,10 +16,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mime\Email;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+
 
 /**
  * @Route("/program", name="program_")
@@ -188,6 +189,27 @@ class ProgramController extends AbstractController
         }
         
         return $this->redirectToRoute('program_episode_show', ['program_id' => $program->getId(), "season_id" => $season->getId(), 'episode_id' => $episode->getId()], Response::HTTP_SEE_OTHER);
+    }
+
+
+    /**
+     * @Route("/{id}/watchlist", name="watchlist", methods={"GET","POST"})
+     * @IsGranted("ROLE_USER")
+     */
+    public function addToWatchlist(Request $request, Program $program, EntityManagerInterface $entityManager): Response   
+    { 
+        if ($this->getUser()->isInWatchList($program)) {
+            $this->getUser()->removeWatchlist($program);
+        } else {
+            $this->getUser()->addWatchlist($program);
+        }
+
+        $entityManager->flush();
+        return $this->json([
+            'isInWatchlist' => $this->getUser()->isInWatchlist($program)
+        ]);
+        
+    
     }
 
 }

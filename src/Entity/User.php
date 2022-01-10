@@ -24,7 +24,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $id;
 
     /**
-     * @var string
      * @ORM\Column(type="string", length=180, unique=true)
      */
     private $email;
@@ -41,18 +40,25 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $password;
 
     /**
+     * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="User")
+     */
+    private $comments;
+
+    /**
      * @ORM\OneToMany(targetEntity=Program::class, mappedBy="owner")
      */
     private $programs;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\ManyToMany(targetEntity=Program::class, inversedBy="viewers")
      */
-    private $isVerified = false;
+    private $watchlist;
 
     public function __construct()
     {
+        $this->comments = new ArrayCollection();
         $this->programs = new ArrayCollection();
+        $this->watchlist = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -144,7 +150,37 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // $this->plainPassword = null;
     }
 
-/**
+    /**
+     * @return Collection|Comment[]
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function addComment(Comment $comment): self
+    {
+        if (!$this->comments->contains($comment)) {
+            $this->comments[] = $comment;
+            $comment->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComment(Comment $comment): self
+    {
+        if ($this->comments->removeElement($comment)) {
+            // set the owning side to null (unless already changed)
+            if ($comment->getAuthor() === $this) {
+                $comment->setAuthor(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
      * @return Collection|Program[]
      */
     public function getPrograms(): Collection
@@ -174,15 +210,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function isVerified(): bool
+    /**
+     * @return Collection|Program[]
+     */
+    public function getWatchlist(): Collection
     {
-        return $this->isVerified;
+        return $this->watchlist;
     }
 
-    public function setIsVerified(bool $isVerified): self
+    public function addWatchlist(Program $watchlist): self
     {
-        $this->isVerified = $isVerified;
+        if (!$this->watchlist->contains($watchlist)) {
+            $this->watchlist[] = $watchlist;
+        }
 
         return $this;
+    }
+
+    public function removeWatchlist(Program $watchlist): self
+    {
+        $this->watchlist->removeElement($watchlist);
+
+        return $this;
+    }
+
+    public function isInWatchlist(Program $program): bool
+    {
+        if ($this->watchlist->contains($program)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
