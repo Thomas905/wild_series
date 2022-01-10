@@ -42,15 +42,7 @@ class EpisodeController extends AbstractController
 
             $slug = $slugify->generate($episode->getTitle());
             $episode->setSlug($slug);
-            $email = (new Email())
-            ->from($this->getParameter('mailer_from'))
-            ->to('your_email@example.com')
-            ->subject('Une nouvelle episode vient d\'être publiée !')
-            ->html('<p>Une nouvelle episode vient d\'être publiée sur Wild Séries !</p>');
-
-        $mailer->send($email);
-
-
+            $this->addFlash('success', 'The episode has been created');
             $entityManager->persist($episode);
             $entityManager->flush();
 
@@ -101,6 +93,7 @@ class EpisodeController extends AbstractController
         if ($this->isCsrfTokenValid('delete'.$episode->getId(), $request->request->get('_token'))) {
             $entityManager->remove($episode);
             $entityManager->flush();
+            $this->addFlash('danger', 'The season has been deleted');
         }
 
         return $this->redirectToRoute('episode_index', [], Response::HTTP_SEE_OTHER);

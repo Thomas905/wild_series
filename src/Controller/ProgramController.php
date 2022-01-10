@@ -26,8 +26,6 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
  */
 class ProgramController extends AbstractController
 {
-
-
     /**
      * @Route("/new", name="new")
      */
@@ -53,13 +51,7 @@ class ProgramController extends AbstractController
             // Flush the persisted object
             $entityManager->flush();
 
-            $email = (new Email())
-                ->from($this->getParameter('mailer_from'))
-                ->to('your_email@example.com')
-                ->subject('Une nouvelle série vient d\'être publiée !')
-                ->html($this->renderView('Program/newProgramEmail.html.twig', ['program' => $program]));
-
-            $mailer->send($email);
+            $this->addFlash('success', 'The new program has been created');
             // Finally redirect to categories list
             return $this->redirectToRoute('program_index');
         }
